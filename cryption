@@ -1,0 +1,191 @@
+#!/bin/bash
+
+while [ $# == 0 ];
+do
+echo "No arguments given"
+echo "Usage: Try cryption -h for more help"	
+break
+done
+
+
+if (( $# >= 3  )); then
+    echo "Too many arguments" 
+    echo "Usage: cryption -h for more help"
+    exit 1
+fi
+for i in $1
+do
+	if [ $1 == "-v" -a $# != 2 ]
+		then
+			echo  -e "cryption --Encrypt and Decrypt files securely\nVersion: 1.01"
+		break
+
+	elif [ $1 == "-v" -a $# == 2 ]
+		then
+
+		echo "Usage: Try cryption -h for more help"
+		break
+	elif [ $1 == "-h" -a $# != 2 -o $1 == "--help" -a $# != 2 ]
+		then
+			cat /home/akshay/Documents/cryption_help
+		break
+	
+	elif [ $1 == "-h" -a $# == 2 -o $1 == "--help" -a $# == 2 ]
+		then
+		echo "Usage: Try cryption -h for more help"
+	fi
+
+
+
+	if [ $1 != -e -a $1 != -d -a $1 != -h -a $1 != "--help" -a $1 != -v -a $1 != "-el"  ]
+		then
+			echo "Invalid option"
+			echo "Try cryption -h for more help"	
+		elif [ $# != 2 ]
+			then
+				echo "Wrong Syntax "
+		echo "Usage: Try cryption -h for more help"
+
+			fi
+
+
+#FOR ENCRYPTION
+
+
+for i in $2
+      do
+         if [ $1 == -e ] && [ $# == 2 ]  
+	       then
+		if [ -f $2 -a  ! -L $2 ]
+			then
+ 		              if [ ${i##*.} == cpt ]
+          		 	  then
+				       	echo "Already encrypted" 
+                			echo "Usage: Try cryption -h for more help"
+					break
+                              
+				 else 
+					ccencrypt $2
+					echo "File encrypted"
+					break
+				fi
+			elif [ -L $2 ]
+				then
+					echo "link file found"
+					echo "Usage: cryption -el [ link_filename ] to forcefully encrypt link_source_file "
+					break
+			elif [ -d $2 ]
+				then
+					echo "Directory Found file expected"
+					echo "Usage: cryption -h for more help"
+					break
+		elif [ $2 == "-h" -o $2 == "--help" ]
+			then 
+			echo -e "cryption -e help page\nEncryption help: \nUsage: cryption -e [file_name]"
+		break
+			elif [ ! -f $2 ] 	
+				then			
+				        echo "No such File "	
+                			echo "Usage: Try cryption -h for more help"
+					break
+                              
+			fi
+			elif [ $1 == -e ] &&  [ $# -ne 2 ]  
+				then
+					echo "Invalid usage"	
+	                		echo "Try cryption -h for more help"	
+					break
+			fi
+
+
+#FOR DECRYPTION
+
+for i in $2
+	      do
+		 if [ $1 == -d ] && [ $# == 2 ] 
+		       then
+		       		if [ -L $2 ]
+						then
+									echo "link file found"
+								echo "Usage: Try cryption -h for more help"
+								break	
+								
+					elif [ -f $2  ]
+						then				
+							if [ ${i##*.} == cpt ] 
+          						then
+								ccdecrypt $2 
+                        	     				echo "File Decrypted" 
+							else
+
+							 echo "Cannot be decrypted"
+							echo "Usage: Try cryption -h for more help"
+						fi
+			elif [ -d $2 ]
+				then
+					echo "Directory Found file expected"
+					echo "Usage: cryption -h for more help"
+					break
+		elif  [ $2 == "-h" -o $2 == "--help"  ] 
+			then		
+				echo -e "cryption -d help page\nDecryption help:\nUsage: cryption -d [file_name.cpt]"
+			break	
+		elif [ ! -f $2 ]
+		 then 	
+			echo "No such file"
+			echo "Usage: Try cryption -h for more help"	
+			fi
+
+		fi
+
+# SYMBOLIC LINK ENCRYPTION
+
+for i in $2
+	do
+              if [ $1 == "-el"  -a  $# == 2 ]
+		      then
+		        if [ -L  $2  ]
+		   	then 
+ 		              if [ ${i##*.} == cpt ]
+          		 	  then
+				       	echo "Already encrypted" 
+                			echo "Usage: Try cryption -h for more help"
+					break
+                              
+				 else 
+					 var=$(readlink -f $2)
+					 ccencrypt $var
+					echo "Link source file encrypted"
+					break
+					
+		          	fi 
+		    elif [ -f $2 ]
+			   then
+				  echo "Not an link file"
+				  echo "Usage: cryption -h for more help"
+				 break 
+			elif [ -d $2 ]
+				then
+					echo "Directory found link file expected"
+					echo "Usage: cryption -h for more help"
+					break
+		elif [ $2 == "-h" -o $2 == "--help" ]
+			then 
+	echo -e "cryption -el help page\nEncryption help: \nUsage: cryption -el [link_file_name]"
+		break
+			elif [ ! -f $2 ] 	
+				then			
+				        echo "No such file"	
+                			echo "Usage: Try cryption -h for more help"
+					break
+                              
+			fi
+		     
+		      fi
+done
+done
+done
+done
+
+
+
